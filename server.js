@@ -16,6 +16,11 @@ app.use(express.json());
 app.use(morgan("dev"));
 app.use(cors());
 
+//API routers
+import adminRouter from "./src/routers/adminRouter.js";
+
+app.use("/api/v1/admin", adminRouter);
+
 //root URL request
 app.use("/", (req, res, next) => {
   const error = {
@@ -25,6 +30,7 @@ app.use("/", (req, res, next) => {
 
 //global error handler
 app.use((error, req, res, next) => {
+  console.log(error);
   const statusCode = error.errorCode || 404;
   res.status(statusCode).json({
     status: "error",

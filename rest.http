@@ -1,0 +1,22 @@
+//admin API 
+
+
+@url= http://localhost:8000/api/v1
+
+POST {{url}}/admin/register
+Content-Type: application/json
+
+#Create new admin user
+#http://localhost:3000/verify?c=8173706b-6955-41a4-b7b5-ee5ad792af34&email=ram123@gmail.com
+Send Request 
+
+
+{
+  "address": "dsaf",
+  "confirmPassword": "123123",
+  "email": "asdf@gmail.Com ",
+  "fName": "asdf",
+  "lName": "asdf123",
+  "Phone": "234355"
+
+}
