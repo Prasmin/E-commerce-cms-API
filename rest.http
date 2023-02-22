@@ -20,3 +20,35 @@ Send Request
   "Phone": "234355"
 
 }
+
+#send request for the category 
+
+ 
+
+##========== category api
+
+### create new api
+Get  {{url}}/category
+
+
+### create new api
+
+POST   {{url}}/category
+Content-Type: application/json
+
+{
+"name": "Mobile"
+}
+
+### get categorie(s)
+PUT  {{url}}/category
+Content-Type: application/json
+
+{
+"_id": "63f51ebcdd6284350c21e485",
+ "status": "inactive",
+"name": "mobile"
+}
+
+### delete category
+DELETE   {{url}}/category/63f51ebcdd6284350c21e485

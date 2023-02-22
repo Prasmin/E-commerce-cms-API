@@ -18,8 +18,10 @@ app.use(cors());
 
 //API routers
 import adminRouter from "./src/routers/adminRouter.js";
+import categoryRouter from "./src/routers/categoryRouter.js";
 
 app.use("/api/v1/admin", adminRouter);
+app.use("/api/v1/category", categoryRouter);
 
 //root URL request
 app.use("/", (req, res, next) => {
