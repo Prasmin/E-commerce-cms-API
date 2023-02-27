@@ -52,3 +52,14 @@ Content-Type: application/json
 
 ### delete category
 DELETE   {{url}}/category/63f51ebcdd6284350c21e485
+
+
+#### payment methods
+POST {{url}}/payment-methods
+Content-Type: application/json
+
+{
+  "status": "active",
+  "name": "paypal",
+  "description": " asdf"
+}

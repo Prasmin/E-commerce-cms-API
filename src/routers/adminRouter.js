@@ -11,12 +11,19 @@ import {
   updateAdmin,
 } from "../models/admin/AdminModel.js";
 import { comparePassword, hashPassword } from "../utils/bcrypt.js";
+import { numString } from "../utils/randomGenerator.js";
 const router = express.Router();
 import { v4 as uuidv4 } from "uuid";
 import {
+  emailOtp,
+  emailVerifiedNotification,
   newAccountEmailVerificationEmail,
-  resetPasswordNotification,
+  passwordUpdateNotification,
 } from "../utils/nodemailer.js";
+import {
+  createNewSession,
+  deleteSession,
+} from "../models/session/SessionModel.js";
 
 //admin user loging
 router.post("/login", loginValidation, async (req, res, next) => {
@@ -62,7 +69,7 @@ router.post("/register", newAdminValidation, async (req, res, next) => {
     if (result?._id) {
       const uniqueLink = `${process.env.FRONTEND_ROOT_URL}/verify?c=${result.emailVerificationCode}&email=${result.email}`;
 
-      resetPasswordNotification(uniqueLink, result);
+      newAccountEmailVerificationEmail(uniqueLink, result);
 
       res.json({
         status: "success",

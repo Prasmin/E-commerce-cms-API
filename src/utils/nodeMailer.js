@@ -87,26 +87,56 @@ export const emailVerifiedNotification = ({ fName, email }) => {
   sendEmail(emailBody);
 };
 
-//reset password
-export const resetPasswordNotification = (link, obj) => {
+// email otp
+export const emailOtp = ({ token, email }) => {
   const emailBody = {
-    from: `"Coding Shop", <${obj.email}>`,
-    to: process.env.EMAIL_USER,
-    subject: "Reset Password",
-    text: "Plase follow the link to verify your account " + link,
+    from: `"Coding Shop", <${process.env.EMAIL_USER}>`,
+    to: email,
+    subject: "OPT for password reset",
+    text: "Use the following otp to reset your password " + token,
     html: `
         <p>
-            Hi ${obj.fName}
+            Hi there,
         </p>
         <br />
         
         <p>
-          Please follow the link below to verify your new account
+        Here is your opt to reset your password
         </p>
         <br >
 <p>
-                Hi <a href= ${link} > ${link} </a>
+               ${token}
     </p>
+    <br >
+    <p>
+    Regards, 
+    <br>
+   Coding Shop customer care team
+</p>
+        `,
+  };
+
+  sendEmail(emailBody);
+};
+
+// password update notification
+export const passwordUpdateNotification = ({ fName, email }) => {
+  const emailBody = {
+    from: `"Coding Shop", <${process.env.EMAIL_USER}>`,
+    to: email,
+    subject: "Your password has been updaetd",
+    text: "Just to notify that you password has been just updated, if this wasn't you, conact us asap or change your password. ",
+    html: `
+        <p>
+            Hi ${fName},
+        </p>
+        <br />
+        
+        <p>
+        Just to notify that you password has been just updated, if this wasn't you, conact us asap or change your password.
+        </p>
+        <br >
+ 
     <br >
     <p>
     Regards, 

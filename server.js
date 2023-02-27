@@ -19,9 +19,11 @@ app.use(cors());
 //API routers
 import adminRouter from "./src/routers/adminRouter.js";
 import categoryRouter from "./src/routers/categoryRouter.js";
+import paymentRouter from "./src/routers/paymentRouter.js";
 
 app.use("/api/v1/admin", adminRouter);
 app.use("/api/v1/category", categoryRouter);
+app.use("/api/v1/payment-methods", paymentRouter);
 
 //root URL request
 app.use("/", (req, res, next) => {
