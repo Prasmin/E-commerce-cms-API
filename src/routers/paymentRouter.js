@@ -3,12 +3,11 @@ import { createNewPayment } from "../models/payment/PaymentModal.js";
 
 const router = express.Router();
 
-//admin payment name
+//admin payment post
 router.post("/", async (req, res, next) => {
   try {
     const { name, description } = req.body;
 
-    console.log(req.body);
     const result = await createNewPayment({ name, description });
 
     if (result?._id) {
