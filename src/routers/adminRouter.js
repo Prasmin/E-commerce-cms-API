@@ -7,7 +7,7 @@ import {
 } from "../middlewares/joiMiddleware.js";
 import {
   createNewAdmin,
-  findAdmin,
+  findUser,
   updateAdmin,
 } from "../models/admin/AdminModel.js";
 import { comparePassword, hashPassword } from "../utils/bcrypt.js";
@@ -31,7 +31,7 @@ router.post("/login", loginValidation, async (req, res, next) => {
     const { email, password } = req.body;
 
     //find user by email
-    const user = await findAdmin({ email });
+    const user = await findUser({ email });
 
     if (user?._id) {
       const isPassMatch = comparePassword(password, user.password); //user.password is bcrypt password

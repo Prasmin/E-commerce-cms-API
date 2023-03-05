@@ -40,6 +40,17 @@ Content-Type: application/json
 "name": "Mobile"
 }
 
+
+
+### request OTP
+POST {{url}}/request-otp
+Content-Type: application/json
+{
+  "email": "asdf@gmail.com",
+  "status": "active"
+}
+
+
 ### get categorie(s)
 PUT  {{url}}/category
 Content-Type: application/json
