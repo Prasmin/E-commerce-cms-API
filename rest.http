@@ -70,7 +70,7 @@ POST {{url}}/payment-methods
 Content-Type: application/json
 
 {
-  "status": "active",
+  
   "name": "paypal",
   "description": " asdf"
 }

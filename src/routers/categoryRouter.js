@@ -49,7 +49,7 @@ router.post("/", async (req, res, next) => {
 });
 
 /// Read Category
-router.post("/", async (req, res, next) => {
+router.get("/", async (req, res, next) => {
   try {
     const cats = await readCategories();
 
