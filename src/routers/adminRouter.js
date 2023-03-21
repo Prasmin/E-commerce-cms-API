@@ -24,6 +24,8 @@ import {
   createNewSession,
   deleteSession,
 } from "../models/session/SessionModel.js";
+import { isAuth } from "../middlewares/authMiddleware.js";
+import { singAccessJWT, verifyRefreshJWT } from "../utils/jwt.js";
 
 //admin user loging
 router.post("/login", loginValidation, async (req, res, next) => {
@@ -207,3 +209,51 @@ router.post("/reset-password", passResetValidation, async (req, res, next) => {
   }
 });
 export default router;
+
+// reutrn user info
+router.get("/user-profile", isAuth, (req, res, next) => {
+  try {
+    const user = req.userInfo;
+    user.password = undefined;
+
+    res.json({
+      status: "success",
+      message: "user found",
+      user,
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+// reutrn new accessJWT
+router.get("/new-accessjwt", async (req, res, next) => {
+  try {
+    const { authorization } = req.headers;
+    console.log(req.headers, "kljhgcgfhjkljgh");
+
+    const { email } = verifyRefreshJWT(authorization);
+
+    if (email) {
+      const user = await findUser({ email });
+
+      if (user?.refreshJWT === authorization) {
+        // create accessJWT and return
+        const accessJWT = await singAccessJWT({ email });
+
+        if (accessJWT) {
+          return res.json({
+            status: "success",
+            accessJWT,
+          });
+        }
+      }
+    }
+
+    res.status(401).json({
+      status: "error",
+      message: "unauthenticated",
+    });
+  } catch (error) {
+    next(error);
+  }
+});

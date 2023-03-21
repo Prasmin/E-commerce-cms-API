@@ -12,9 +12,35 @@ const PaymentSchema = new mongoose.Schema(
       unique: true,
       index: 1,
     },
+    sku: {
+      type: String,
+      required: true,
+      unique: true,
+      index: 1,
+    },
 
     description: {
       type: String,
+      required: true,
+    },
+    price: {
+      type: Number,
+      required: true,
+    },
+    sales: {
+      type: Number,
+      required: true,
+    },
+    price: {
+      type: Number,
+      required: true,
+    },
+    price: {
+      type: Number,
+      required: true,
+    },
+    price: {
+      type: Number,
       required: true,
     },
   },

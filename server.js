@@ -20,10 +20,13 @@ app.use(cors());
 import adminRouter from "./src/routers/adminRouter.js";
 import categoryRouter from "./src/routers/categoryRouter.js";
 import paymentRouter from "./src/routers/paymentRouter.js";
+import { isAuth } from "./src/middlewares/authMiddleware.js";
+import productRouter from "./src/routers/productRouter.js";
 
 app.use("/api/v1/admin", adminRouter);
-app.use("/api/v1/category", categoryRouter);
-app.use("/api/v1/payment-methods", paymentRouter);
+app.use("/api/v1/category", isAuth, categoryRouter);
+app.use("/api/v1/payment-methods", isAuth, paymentRouter);
+app.use("/api/v1/products", isAuth, productRouter);
 
 //root URL request
 app.use("/", (req, res, next) => {
