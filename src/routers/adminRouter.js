@@ -11,7 +11,6 @@ import {
   updateAdmin,
 } from "../models/admin/AdminModel.js";
 import { comparePassword, hashPassword } from "../utils/bcrypt.js";
-import { numString } from "../utils/randomGenerator.js";
 const router = express.Router();
 import { v4 as uuidv4 } from "uuid";
 import {
@@ -20,41 +19,66 @@ import {
   newAccountEmailVerificationEmail,
   passwordUpdateNotification,
 } from "../utils/nodemailer.js";
+import { numString } from "../utils/randomGenerator.js";
 import {
   createNewSession,
   deleteSession,
 } from "../models/session/SessionModel.js";
+import {
+  singAccessJWT,
+  singRefreshJWT,
+  verifyRefreshJWT,
+} from "../utils/jwt.js";
 import { isAuth } from "../middlewares/authMiddleware.js";
-import { singAccessJWT, verifyRefreshJWT } from "../utils/jwt.js";
 
 //admin user loging
 router.post("/login", loginValidation, async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
-    //find user by email
+    // find user by email
     const user = await findUser({ email });
 
     if (user?._id) {
-      const isPassMatch = comparePassword(password, user.password); //user.password is bcrypt password
-      console.log(isPassMatch);
-
-      if (isPassMatch) {
-        user.password = undefined;
-        user._v = undefined;
-        console.log(user);
-        res.json({
-          status: "success",
-          message: " login succesfully",
+      if (!user?.isEmailVerified) {
+        return res.json({
+          status: "error",
+          message:
+            "You email is not veirfied. Check your email and follow the instruction and verify your account.",
           user,
         });
+      }
+
+      // check if plain password and hashed password match
+      const isPassMatch = comparePassword(password, user.password);
+
+      //login successfull or invalid login details
+      if (isPassMatch) {
+        // create accessJWT, refreshJWT
+        // store accessJWT in session table
+        // store refreshJWT in in user table
+        //return tokens to the client
+
+        user.password = undefined;
+        user.__v = undefined;
+        res.json({
+          status: "success",
+          message: "Login success fully",
+
+          toknes: {
+            accessJWT: await singAccessJWT({ email }),
+            refreshJWT: await singRefreshJWT({ email }),
+          },
+        });
+
         return;
       }
-      res.json({
-        status: "error",
-        message: "Invalid login details!",
-      });
     }
+
+    res.json({
+      status: "error",
+      message: "Invalid Login Details",
+    });
   } catch (error) {
     next(error);
   }
@@ -76,7 +100,7 @@ router.post("/register", newAdminValidation, async (req, res, next) => {
       res.json({
         status: "success",
         message:
-          "We have send a verification email. Please check your email, including junk folder, and follow the instruction to activate your account.",
+          "We have send a verification email. Please check your email, inclucing junk folder, and follow the instruction to verify your account.",
       });
 
       return;
@@ -96,11 +120,10 @@ router.post("/register", newAdminValidation, async (req, res, next) => {
   }
 });
 
-//admin user email verification.
+// admin user email verification
 router.post("/verify", emailVerificationValidation, async (req, res, next) => {
   try {
-    const { email, emailVerification } = req.body;
-    //chek if the combination of email and code exist in db if so set the status active and code to "" in the db, also update is email verified to true
+    // chek if the combination of email and code exist in db if so set the status active and code to "" in the db, also update is email verified to true
 
     const obj = {
       status: "active",
@@ -109,6 +132,7 @@ router.post("/verify", emailVerificationValidation, async (req, res, next) => {
     };
 
     const user = await updateAdmin(req.body, obj);
+
     if (user?._id) {
       //send email notification
       emailVerifiedNotification(user);
@@ -176,7 +200,7 @@ router.post("/request-otp", async (req, res, next) => {
 });
 
 // password reset request
-router.post("/reset-password", passResetValidation, async (req, res, next) => {
+router.patch("/reset-password", passResetValidation, async (req, res, next) => {
   try {
     const { email, opt, password } = req.body;
 
@@ -208,7 +232,6 @@ router.post("/reset-password", passResetValidation, async (req, res, next) => {
     next(error);
   }
 });
-export default router;
 
 // reutrn user info
 router.get("/user-profile", isAuth, (req, res, next) => {
@@ -229,7 +252,6 @@ router.get("/user-profile", isAuth, (req, res, next) => {
 router.get("/new-accessjwt", async (req, res, next) => {
   try {
     const { authorization } = req.headers;
-    console.log(req.headers, "kljhgcgfhjkljgh");
 
     const { email } = verifyRefreshJWT(authorization);
 
@@ -257,3 +279,5 @@ router.get("/new-accessjwt", async (req, res, next) => {
     next(error);
   }
 });
+
+export default router;

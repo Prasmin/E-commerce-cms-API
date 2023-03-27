@@ -8,6 +8,10 @@ export const getAllProducts = () => {
   return ProductSchema.find();
 };
 
+export const geProductById = (_id) => {
+  return ProductSchema.findById(_id);
+};
+
 export const getSingleProduct = (filter) => {
   return ProductSchema.findOne(filter);
 };
