@@ -4,7 +4,7 @@ import { createNewSession } from "../models/session/SessionModel.js";
 
 export const singAccessJWT = async (paylodad) => {
   const accessJWT = jwt.sign(paylodad, process.env.JWT_ACCESS, {
-    expiresIn: "1m",
+    expiresIn: "1d",
   });
 
   //store the key

@@ -5,25 +5,29 @@ import {
 } from "../middlewares/joiMiddleware.js";
 import {
   createProduct,
+  geProductById,
   getAllProducts,
+  updateProduct,
+  deleteProducts,
 } from "../models/product/ProductModel.js";
 import slugify from "slugify";
+const router = express.Router();
 import multer from "multer";
 import fs from "fs";
 import path from "path";
 
-const router = express.Router();
-
 const __dirname = path.resolve();
 
-const imgFolderPath = "public/img/products";
+const imgFolderPath = "public/image/products";
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     let error = null;
-    //validation error check
+    // validation error check
     cb(error, imgFolderPath);
   },
   filename: (req, file, cb) => {
+    let error = null;
     const fullFileName = Date.now() + "_" + file.originalname;
     cb(error, fullFileName);
   },
