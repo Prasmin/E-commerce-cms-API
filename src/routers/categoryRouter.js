@@ -7,7 +7,7 @@ import {
 } from "../models/category/CategoryModel.js";
 import slugify from "slugify";
 import { updatCatValidation } from "../middlewares/joiMiddleware.js";
-import { getSelectedProduct } from "../model/products/productsModel.js";
+import { getSelectedProduct } from "../models/product/ProductModel.js";
 
 const router = express.Router();
 
@@ -65,7 +65,7 @@ router.get("/", async (req, res, next) => {
 });
 
 //update category
-router.put("/", updatCatValidation, async (res, req, next) => {
+router.put("/:_id?", updatCatValidation, async (req, res, next) => {
   try {
     const result = await updateCategory(req.body);
 
@@ -76,6 +76,7 @@ router.put("/", updatCatValidation, async (res, req, next) => {
         result,
       });
     }
+
     res.json({
       status: "error",
       message: "Unanble to upda the category, please try gain later",

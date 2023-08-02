@@ -13,8 +13,8 @@ export const getCategoryById = (_id) => {
   return CategorySchema.findById(_id);
 };
 
-export const updateCategory = ({ _id, ...rest }) => {
-  return CategorySchema.findByIdAndUpdate(_id, rest, { new: true });
+export const updateCategory = (_id, obj) => {
+  return CategorySchema.findByIdAndUpdate(_id, obj, { new: true });
 };
 
 export const deleteCat = (_id) => {

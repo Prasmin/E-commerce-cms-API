@@ -3,12 +3,27 @@
 
 @url= http://localhost:8000/api/v1
 
+### Register a new user
+POST {{url}}/admin/register
+Content-Type: application/json
+
+{
+  "fname": "leonal",
+  "lname": "Messi",
+  "email": "messi123@gmail.com",
+  "password": "123",
+
+}
+
+
+###login
 POST {{url}}/admin/login
 Content-Type: application/json
+
 {
   
-  "password": "321",
-  "email": "sam1@gmail.com "
+  "email": "messi10@gmail.com ",
+  "password": "123123"
   
 
 }
@@ -43,14 +58,14 @@ Content-Type: application/json
 }
 
 
-### get categorie(s)
-PUT  {{url}}/category
+### update categorie(s)
+PUT {{url}}/category
 Content-Type: application/json
 
 {
-"_id": "63f51ebcdd6284350c21e485",
+"_id": "64788a1353e707462836303d",
  "status": "inactive",
-"name": "mobile"
+"name": "Clothing Mensss"
 }
 
 ### delete category
@@ -71,3 +86,15 @@ Content-Type: application/json
 #####AWS health check 
 get https: 
 
+
+###Add new products
+POST {{url}}/products/new
+Content-Type: application/json
+
+{
+  "name": "jacket",
+  "Qty": "23",
+  "price": "323",
+  "description": "sdsdf"
+
+}
